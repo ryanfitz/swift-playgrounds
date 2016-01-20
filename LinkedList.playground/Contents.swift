@@ -1,19 +1,17 @@
-//: Playground - noun: a place where people can play
-
-import UIKit
 
 class Node {
     let data : Int
     var next : Node?
     var prev : Node?
     
-//    init(data: Int) {
-//        self.data = data
-//    }
-    
     init(data: Int, prev : Node? = nil) {
         self.data = data
         self.prev = prev
+    }
+    
+    func append(data : Int) -> Node {
+        self.next = Node(data: data, prev: self)
+        return self.next!
     }
 }
 
@@ -22,18 +20,9 @@ class LinkedList {
     var tail: Node?
     
     func append(data : Int) {
-        let next = Node(data: data, prev: self.tail)
+        self.tail = self.tail?.append(data) ?? Node(data: data)
         
-        if let t = self.tail {
-            t.next = next
-            self.tail = next
-        } else {
-            self.tail = next
-        }
-        
-        if let h = self.head where h.next == nil {
-            h.next = tail
-        } else if self.head == nil {
+        if self.head == nil {
             self.head = self.tail
         }
     }
