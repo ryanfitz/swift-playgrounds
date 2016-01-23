@@ -43,14 +43,78 @@ class Stack<T> : SequenceType {
     }
 }
 
-let s = Stack<Int>()
-
-s.push(1)
-s.push(2)
-s.push(3)
-
-for val in s {
-    print("stack pop \(val)")
+class Queue<T> : SequenceType {
+    var head : Node<T>?
+    var tail : Node<T>?
+    
+    var isEmpty : Bool {
+        return head == nil
+    }
+    
+    func push(item: T) {
+        let node = Node(val: item)
+        
+        if let t = self.tail {
+            t.next = node
+        }
+        
+        self.tail = node
+        
+        if self.head == nil {
+            self.head = self.tail
+        }
+    }
+    
+    func pop() -> T? {
+        guard let h = self.head else {
+            return nil
+        }
+        
+        let result = h.val
+        self.head = h.next
+        
+        if self.head == nil {
+            self.tail = nil
+        }
+        
+        return result
+    }
+    
+    func generate() -> AnyGenerator<T> {
+        return anyGenerator {
+            return self.pop()
+        }
+    }
 }
 
-//let a = s.map { $0 * 5 }
+func runQueueStackExamples() {
+    let s = Stack<Int>()
+    s.push(1)
+    s.push(2)
+    s.push(3)
+
+    for val in s {
+        print("stack pop \(val)")
+    }
+
+    //let a = s.map { $0 * 5 }
+
+    print("===========================")
+    let q = Queue<Int>()
+    q.push(1)
+    q.push(2)
+    q.push(3)
+
+    for val in q {
+        print("queue pop \(val)")
+    }
+
+    q.push(9)
+    q.push(2)
+    q.push(11)
+
+    print("===========================")
+    for val in q {
+        print("queue pop \(val)")
+    }
+}
