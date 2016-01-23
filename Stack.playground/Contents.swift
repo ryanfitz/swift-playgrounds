@@ -9,7 +9,7 @@ class Node<T> {
     }
 }
 
-class Stack<T> {
+class Stack<T> : SequenceType {
     var head : Node<T>?
     
     var isEmpty : Bool {
@@ -35,6 +35,12 @@ class Stack<T> {
         
         return existingHead.val
     }
+    
+    func generate() -> AnyGenerator<T> {
+        return anyGenerator {
+            return self.pop()
+        }
+    }
 }
 
 let s = Stack<Int>()
@@ -43,6 +49,8 @@ s.push(1)
 s.push(2)
 s.push(3)
 
-while !s.isEmpty {
-    print("stack pop \(s.pop())")
+for val in s {
+    print("stack pop \(val)")
 }
+
+//let a = s.map { $0 * 5 }
