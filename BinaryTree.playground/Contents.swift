@@ -5,8 +5,9 @@ import UIKit
 class BinaryNode : CustomStringConvertible {
     var left : BinaryNode?
     var right : BinaryNode?
+    weak var parent : BinaryNode?
     
-    let val : Int
+    var val : Int
     
     init(val : Int) {
         self.val = val
@@ -36,12 +37,46 @@ class BinarySearchTree {
     private func appendNode(node: BinaryNode, root: BinaryNode) {
         if root.left == nil && node.val < root.val {
             root.left = node
+            node.parent = root
         } else if root.right == nil && node.val > root.val {
             root.right = node
+            node.parent = root
         } else if let left = root.left where node.val < root.val {
             appendNode(node, root: left)
         } else if let right = root.right where node.val > root.val {
             appendNode(node, root: right)
+        }
+    }
+    
+    func remove(val: Int) {
+        guard let node = self.find(val) else {
+            return
+        }
+        
+        removeNode(node)
+    }
+    
+    func removeNode(node: BinaryNode) {
+        if node.left == nil && node.right == nil {
+            self.removeParentLink(node)
+        } else if let right = node.right {
+            let minNode = self.findMinNode(right)
+            node.val = minNode.val
+            removeNode(minNode)
+        } else if let left = node.left {
+            let maxNode = self.findMaxNode(left)
+            node.val = maxNode.val
+            removeNode(maxNode)
+        }
+    }
+    
+    private func removeParentLink(node: BinaryNode) {
+        if let p = node.parent {
+            if p.left?.val == node.val {
+                p.left = nil
+            } else if p.right?.val == node.val {
+                p.right = nil
+            }
         }
     }
     
@@ -126,7 +161,6 @@ func badTree() -> BinaryNode {
 }
 
 let tree = BinarySearchTree()
-
 tree.append(12)
 tree.append(15)
 tree.append(9)
@@ -147,3 +181,18 @@ print("badtree is bst \(tree.isBST(badTree()))")
 
 tree.findMin()
 tree.findMax()
+
+tree.remove(9)
+print("find \(tree.find(12))")
+
+let tree2 = BinarySearchTree()
+tree2.append(12)
+tree2.append(9)
+tree2.append(7)
+tree2.append(8)
+tree2.append(15)
+tree2.remove(9)
+tree2.remove(12)
+print("find 2 \(tree2.find(12))")
+print("find 2 \(tree2.find(8))")
+tree2.isBST()
