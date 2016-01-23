@@ -1,4 +1,120 @@
 
+class BinaryNode<T> {
+    var val : T
+    
+    var left : BinaryNode<T>?
+    var right : BinaryNode<T>?
+    
+    init(val : T) {
+        self.val = val
+    }
+}
+
+class BinarySearchTree<T:Comparable> {
+    var root : BinaryNode<T>?
+    
+    var isValidBST : Bool {
+       return self.isBST(self.root)
+    }
+    
+    var min :  T? {
+        guard let r = self.root else {
+            return nil
+        }
+        
+        return self.findMinNode(r).val
+    }
+    
+    var max :  T? {
+        guard let r = self.root else {
+            return nil
+        }
+        
+        return self.findMaxNode(r).val
+    }
+    
+    func append(val : T) {
+        let node = BinaryNode(val: val)
+        
+        if let r = root {
+            self.appendNode(node, root: r)
+        } else {
+            root = node
+        }
+    }
+    
+    func find(val: T) -> BinaryNode<T>? {
+        return self.find(val, root: self.root)
+    }
+    
+    private func appendNode(node: BinaryNode<T>, root: BinaryNode<T>) {
+        if root.left == nil && node.val < root.val {
+            root.left = node
+        } else if root.right == nil && node.val > root.val {
+            root.right = node
+        } else if let left = root.left where node.val < root.val {
+            appendNode(node, root: left)
+        } else if let right = root.right where node.val > root.val {
+            appendNode(node, root: right)
+        }
+    }
+    
+    private func isBST(root : BinaryNode<T>? = nil) -> Bool {
+        guard let node = root else {
+            return true
+        }
+        
+        if let l = node.left where l.val > node.val {
+            return false
+        } else if let r = node.right where r.val < node.val {
+            return false
+        } else {
+            return isBST(node.left) && isBST(node.right)
+        }
+    }
+    
+    private func find(val: T, root: BinaryNode<T>?) -> BinaryNode<T>? {
+        guard let node = root else {
+            return nil
+        }
+        
+        if node.val == val {
+            return node
+        } else if val > node.val {
+            return find(val, root: node.right)
+        } else {
+            return find(val, root: node.left)
+        }
+    }
+    
+    private func findMinNode(root: BinaryNode<T>) -> BinaryNode<T> {
+        if let left = root.left {
+            return findMinNode(left)
+        } else {
+            return root
+        }
+    }
+    
+    func findMaxNode(root: BinaryNode<T>) -> BinaryNode<T> {
+        if let right = root.right {
+            return findMaxNode(right)
+        } else {
+            return root
+        }
+    }
+}
+
+let tree = BinarySearchTree<Int>()
+tree.append(10)
+tree.append(44)
+tree.append(32)
+tree.append(2)
+tree.append(-2)
+
+print("is tree valid BST? - \(tree.isValidBST)")
+print("tree min \(tree.min)")
+print("tree max \(tree.max)")
+
 class Node<T> {
     var val : T
     
