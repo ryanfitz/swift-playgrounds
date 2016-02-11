@@ -301,6 +301,10 @@ class BinarySearchTree<T:Comparable> {
         return result
     }
     
+    func levelOrder() -> [T] {
+        return levelOrder(self.root)
+    }
+    
     private func inOrder(root: BinaryNode<T>?, queue : Queue<T>) {
         guard let r = root else {
             return
@@ -330,6 +334,33 @@ class BinarySearchTree<T:Comparable> {
         postOrder(r.right, queue: queue)
         queue.push(r.val)
     }
+    
+    private func levelOrder(root: BinaryNode<T>?) -> [T] {
+        guard let r = root else {
+            return []
+        }
+        
+        var result = [T]()
+        
+        let queue = Queue<BinaryNode<T>>()
+        queue.push(r)
+        
+        while !queue.isEmpty {
+            if let tempNode = queue.pop() {
+                
+                result.append(tempNode.val)
+                if let left = tempNode.left {
+                    queue.push(left)
+                }
+                
+                if let right = tempNode.right {
+                    queue.push(right)
+                }
+            }
+        }
+        
+        return result
+    }
 }
 
 let tree = BinarySearchTree<Int>()
@@ -345,3 +376,5 @@ print("nearest \(tree.findNearest(17))")
 print("in order \(tree.inOrder())")
 print("pre order \(tree.preOrder())")
 print("post order \(tree.postOrder())")
+
+print("level order \(tree.levelOrder())")
