@@ -34,6 +34,7 @@ func subsetSum(numbers : [Int], target : Int) -> Bool {
     return matrix[numbers.count - 1][target]
 }
 
+subsetSum([3, 5, 21], target: 4)
 subsetSum([3, 12, 21], target: 22)
 
 typealias knapItem = (w: Int, v: Int)

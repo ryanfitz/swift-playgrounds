@@ -2,20 +2,6 @@
 
 import UIKit
 
-var str = "Hello, playground"
-
-func sort(data: [Int]) -> [Int] {
-    guard data.count > 1 else {
-        return data
-    }
-    
-    let mid = data.count / 2
-    let left = Array(data[0..<mid])
-    let right = Array(data[mid...data.count - 1])
-    
-    return merge(sort(left), right: sort(right))
-}
-
 func getElement(data: [Int], position: Int) -> Int? {
     if data.count > position {
         return data[position]
@@ -23,8 +9,6 @@ func getElement(data: [Int], position: Int) -> Int? {
     
     return nil
 }
-
-getElement([1,2,3], position: 0)
 
 func merge(left: [Int], right: [Int]) -> [Int] {
     var result = [Int]()
@@ -56,7 +40,27 @@ func merge(left: [Int], right: [Int]) -> [Int] {
     return result
 }
 
+func sort(data: [Int]) -> [Int] {
+    guard data.count > 1 else {
+        return data
+    }
+    
+    let mid = data.count / 2
+    let left = Array(data[0..<mid])
+    let right = Array(data[mid...data.count - 1])
+    
+    return merge(sort(left), right: sort(right))
+}
+
 var s = sort([1, 4, 5, 4, 2, 3, 9, 22, 13, 8])
 
 print("sorted \(s)")
-
+//
+//var singleChar = "ab"
+//let c = "c"
+//
+//c.unicodeScalars.first?.value
+//
+//let chars = singleChar.characters.map { String($0) }
+//chars[1].unicodeScalars.first!.value << 5
+//chars[0].hashValue
