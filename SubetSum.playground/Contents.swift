@@ -35,7 +35,50 @@ func subsetSum(numbers : [Int], target : Int) -> Bool {
 }
 
 subsetSum([3, 5, 21], target: 4)
+subsetSum([3, 5, 21], target: 6)
 subsetSum([3, 12, 21], target: 22)
+
+func subsetSumUniq(numbers : [Int], target : Int) -> Bool {
+    
+    var matrix = [[Bool]]()
+    for idx in 0...numbers.count {
+        matrix.append([true])
+        if idx == 0 {
+            for _ in 1...target {
+                matrix[0].append(false)
+            }
+        }
+    }
+    
+    for row in 1...numbers.count {
+        let currentNum = numbers[row - 1]
+        
+        for col in 1...target {
+            var isSum = false
+            var back = false
+            
+            let prevSum = matrix[row - 1][col]
+            
+            if col - currentNum >= 0 {
+                if (col - currentNum) < matrix[row - 1].count {
+                    back = matrix[row - 1][col - currentNum]
+                }
+            }
+            
+            isSum = back || prevSum
+            
+            matrix[row].append(isSum)
+        }
+    }
+    
+    return matrix[numbers.count][target]
+}
+
+subsetSumUniq([3, 5, 21], target: 4)
+subsetSumUniq([3, 5, 21], target: 6)
+subsetSumUniq([3, 5, 21], target: 8)
+subsetSumUniq([3, 12, 21], target: 22)
+subsetSumUniq([3, 12, 21], target: 24)
 
 typealias knapItem = (w: Int, v: Int)
 
